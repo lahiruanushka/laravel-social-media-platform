@@ -19,12 +19,7 @@
             <div class="d-flex justify-content-between align-items-baseline mb-3">
                 <div>
                     <div class="d-flex align-items-center">
-                        <h1 class="h4 p-2">{{ $user->username }}</h1>
-                  
-                  <div id="app">
-  <follow-button :user-id="{{ $user->id }}" :is-following="{{ $user->is_following ? 'true' : 'false' }}"></follow-button>
-</div>
-    
+                        <h1 class="h4 p-2">{{ $user->username }}</h1>    
                     </div>
                     
                     <div class="d-flex flex-wrap">
