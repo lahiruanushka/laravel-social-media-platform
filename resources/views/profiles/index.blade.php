@@ -4,25 +4,28 @@
 <div class="container">
     <!-- Profile Info -->
     <div class="row">
-        <div class="col-md-3">
-            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Avatar" class="rounded-circle w-50">
+        <div class="col-md-3 text-center">
+            <img src="{{ $user->profile->image ? asset('storage/' . $user->profile->image) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' }}" alt="Avatar" class="rounded-circle img-fluid mb-3">
+            <h1 class="h4">{{ $user->username }}</h1>
+            <a href="/p/create" class="btn btn-outline-primary btn-block">Add New Post</a>
         </div>
         <div class="col-md-9">
-            <div class="d-flex justify-content-between align-items-baseline">
-                <h1>{{ $user->username }}</h1>
-                <a href="/p/create" class="btn btn-primary">Add New Post</a>
-
+            <div class="d-flex justify-content-between align-items-baseline mb-3">
+                <div>
+                    <h1 class="h4 mb-1">{{ $user->username }}</h1>
+                    <div class="d-flex flex-wrap">
+                        <div class="pr-4"><strong>{{ $user->posts->count() }}</strong> posts</div>
+                        <div class="pr-4"><strong>15k</strong> followers</div>
+                        <div class="pr-4"><strong>1000</strong> following</div>
+                    </div>
+                </div>
+                <a href="/p/create" class="btn btn-primary d-md-none">Add New Post</a>
             </div>
-            <div class="d-flex">
-                <div class="pr-4"><strong>150</strong> posts</div>
-                <div class="pr-4"><strong>15k</strong> followers</div>
-                <div class="pr-4"><strong>1000</strong> following</div>
-            </div>
-            <div class="pt-3">
-                <div class="font-weight-bold">{{ $user->profile->title }}</div>
+            <div class="pb-3">
+                <h2 class="h5 font-weight-bold">{{ $user->profile->title }}</h2>
                 <p>{{ $user->profile->description }}</p>
                 @if ($user->profile->url)
-                    <p><a href="{{ $user->profile->url }}">{{ $user->profile->url }}</a></p>
+                    <p><a href="{{ $user->profile->url }}" target="_blank">{{ $user->profile->url }}</a></p>
                 @else
                     <p>N/A</p>
                 @endif
@@ -32,16 +35,14 @@
     <!-- Profile Info -->
 
     <!-- Posts -->
-    <div class="row pt-5">
-        <div class="col-md-4">
-            <img src="https://w0.peakpx.com/wallpaper/40/935/HD-wallpaper-nature-beautiful.jpg" class="w-100 mb-4 rounded">
+    <div class="row pt-4">
+        @foreach($user->posts as $post)
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ asset('storage/' . $post->image) }}" class="card-img-top rounded" alt="Post Image">
+            </div>
         </div>
-        <div class="col-md-4">
-            <img src="https://images.pexels.com/photos/2486168/pexels-photo-2486168.jpeg" class="w-100 mb-4 rounded">
-        </div>
-        <div class="col-md-4">
-            <img src="https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA5L3Jhd3BpeGVsX29mZmljZV8zM193YWxscGFwZXJfcGF0dGVybl9vZl9wYXN0ZWxfY29sb3JlZF9wZW5jaWxfdF9kNzIzNTM5YS1iMDJiLTQ0ZmItYjA5Zi1mNzQwNjMxYjM1NTNfMS5qcGc.jpg" class="w-100 mb-4 rounded">
-        </div>
+        @endforeach   
     </div>
     <!-- Posts -->
 </div>
