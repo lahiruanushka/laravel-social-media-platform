@@ -6,7 +6,7 @@
         <!-- Post Image Section -->
         <div class="col-md-8 mb-4">
             <div class="card">
-                <img src="{{ asset('storage/' . $post->image) }}" alt="Image description" class="card-img-top">
+                <img src="{{ asset('storage/' . $post->image) }}" class="card-img-top rounded" alt="Post Image">
             </div>
         </div>
 
@@ -15,10 +15,18 @@
             <div class="card p-3">
                 <div class="d-flex align-items-center">
                     <div class="mr-3">
-                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="User Avatar" class="rounded-circle" style="width: 50px; height: 50px;">
+<img src="{{ asset('storage/' . $post->user->profile->image) }}" alt="Avatar" class="rounded-circle img-fluid mb-3" style="width: 50px; height: 50px;">
                     </div>
-                    <div>
-                        <h5 class="mb-0">{{ $post->user->username }}</h5>
+                    <div class="align-items-center">
+                        <h5 class="mb-0 p-3">
+                            <a href="/profile/{{ $post->user->id }}" class="font-weight-bold text-dark">
+                            {{ $post->user->username }}
+                                                                
+                            </a>
+                            <a href="#" class="btn btn-primary pl-3">
+                                Follow
+                            </a>
+                        </h5>
                     </div>
                 </div>
                 <hr>

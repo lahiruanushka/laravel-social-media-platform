@@ -1,20 +1,27 @@
-@extends('layouts.app')
 
+@extends('layouts.app')
 @section('content')
+
 <div class="container">
     <!-- Profile Info -->
     <div class="row">
         <div class="col-md-3 text-center">
-            <img src="{{ $user->profile->image ? asset('storage/' . $user->profile->image) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' }}" alt="Avatar" class="rounded-circle img-fluid mb-3">
-            <h1 class="h4">{{ $user->username }}</h1>
-            <a href="/p/create" class="btn btn-outline-primary btn-block">Edit Profile</a>
+
+<img  src="{{ asset($user->profile->profileImage()) }}" alt="Avatar" class="rounded-circle img-fluid mb-3">
+
+            @can('update', $user->profile)
+            <a href="/profile/{{$user->id}}/edit" class="btn btn-outline-primary btn-block">Edit Profile</a>
 
             <a href="/p/create" class="btn btn-outline-primary btn-block">Add New Post</a>
+            @endcan
         </div>
         <div class="col-md-9">
             <div class="d-flex justify-content-between align-items-baseline mb-3">
                 <div>
-                    <h1 class="h4 mb-1">{{ $user->username }}</h1>
+                    <div class="d-flex align-items-center">
+                        <h1 class="h4 p-2">{{ $user->username }}</h1>    
+                    </div>
+                    
                     <div class="d-flex flex-wrap">
                         <div class="pr-4"><strong>{{ $user->posts->count() }}</strong> posts</div>
                         <div class="pr-4"><strong>15k</strong> followers</div>
@@ -41,9 +48,9 @@
         @foreach($user->posts as $post)
         <div class="col-md-4 mb-4">
             <div class="card">
-                <a href="/p/{{ $post->id}}">
-                <img src="{{ asset('storage/' . $post->image) }}" class="card-img-top rounded" alt="Post Image">
-                    
+                <a href="/p/{{$post->id}}">
+<img src="{{ asset('storage/' . $post->image) }}" class="card-img-top rounded" alt="Post Image">
+                                        
                 </a>
             </div>
         </div>

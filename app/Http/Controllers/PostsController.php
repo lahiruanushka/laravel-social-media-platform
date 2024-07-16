@@ -37,8 +37,8 @@ class PostsController extends Controller
             //resized image
             $image = $image->resize(1200,1200);
             // save modified image in new format 
-            $image->save(public_path('storage/uploads/'.$name_gen));
-            $imagePath = 'uploads/'.$name_gen;
+            $image->save(public_path('storage/uploads/posts/'.$name_gen));
+            $imagePath = 'uploads/posts/'.$name_gen;
         }
 
         // Save post to database
