@@ -1,0 +1,14 @@
+/* public/css/custom.css */
+
+.card-img-top {
+    object-fit: cover;
+    height: 400px;
+}
+
+.card p {
+    margin: 0;
+}
+
+.rounded-circle {
+    object-fit: cover;
+}

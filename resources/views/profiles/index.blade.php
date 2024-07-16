@@ -7,6 +7,8 @@
         <div class="col-md-3 text-center">
             <img src="{{ $user->profile->image ? asset('storage/' . $user->profile->image) : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' }}" alt="Avatar" class="rounded-circle img-fluid mb-3">
             <h1 class="h4">{{ $user->username }}</h1>
+            <a href="/p/create" class="btn btn-outline-primary btn-block">Edit Profile</a>
+
             <a href="/p/create" class="btn btn-outline-primary btn-block">Add New Post</a>
         </div>
         <div class="col-md-9">
@@ -39,7 +41,10 @@
         @foreach($user->posts as $post)
         <div class="col-md-4 mb-4">
             <div class="card">
+                <a href="/p/{{ $post->id}}">
                 <img src="{{ asset('storage/' . $post->image) }}" class="card-img-top rounded" alt="Post Image">
+                    
+                </a>
             </div>
         </div>
         @endforeach   
