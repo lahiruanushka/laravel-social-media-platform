@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\Cache;
 
 class ProfilesController extends Controller
 {
@@ -14,7 +15,32 @@ class ProfilesController extends Controller
 
     public function index(User $user)
     {
-        return view('profiles.index', compact('user'));
+
+        $postCount = Cache::remember(
+            'count.posts' .$user->id, 
+            now()->addSeconds(30),
+            function() use($user){
+                return $user->posts->count(); 
+            }
+        );
+
+        $followersCount = Cache::remember(
+            'count.followers' .$user->id, 
+            now()->addSeconds(30),
+            function() use($user){
+                return $user->followers->count(); 
+            }
+        );
+
+        $followingCount = Cache::remember(
+            'count.following' .$user->id, 
+            now()->addSeconds(30),
+            function() use($user){
+                return $user->following->count();
+            }
+        );
+
+        return view('profiles.index', compact('user','postCount','followersCount','followingCount'));
     }
 
     public function edit(User $user)
