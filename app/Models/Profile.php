@@ -11,10 +11,12 @@ class Profile extends Model
 
 
 public function profileImage() {
-    return $this->image ? 'storage/' . $this->image : 'profile-pictures/blank-profile-picture.png';
+    return $this->image ? $this->image : 'profile-pictures/blank-profile-picture.png';
 }
                     
-
+ public function followers(){
+    return $this->belongsToMany(User::class);
+ }
 
 
     public function user(){
