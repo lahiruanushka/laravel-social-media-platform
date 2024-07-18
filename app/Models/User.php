@@ -76,6 +76,9 @@ protected static function boot()
         $user->profile()->create([
             'title' => $user->username,
         ]);
+
+          // Send welcome email to the user
+        Mail::to($user->email)->send(new NewUserWelcomeMail());
     });
 
 }

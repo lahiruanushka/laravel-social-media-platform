@@ -10,6 +10,25 @@ use Intervention\Image\Drivers\Gd\Driver;
 
 class PostsController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
+public function index()
+{
+    // Retrieve IDs of users that the current user is following
+    $followingIds = auth()->user()->following()->pluck('users.id');
+
+    // Fetch posts from users that the current user is following, ordered by latest first
+    $posts = Post::whereIn('user_id', $followingIds)
+                ->with('user')
+                 ->latest() // Order by created_at DESC (latest first)
+                 ->get();
+
+   return view('posts.index',compact('posts'));
+}
+
+
     public function create()
     {
         return view('posts.create');
