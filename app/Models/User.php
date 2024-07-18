@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewUserWelcomeMail;
 
 class User extends Authenticatable
 {
@@ -54,6 +56,16 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id');
+    }
+
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id');
+    }
+
 
 protected static function boot()
 {
@@ -62,12 +74,10 @@ protected static function boot()
     static::created(function ($user) {
         // Create a profile for the newly created user
         $user->profile()->create([
-            'title' => 'Default Title',
-            'description' => 'Default Description',
-            'url' => 'https://example.com',
-            'image' => '', // Default image path or null
+            'title' => $user->username,
         ]);
     });
+
 }
 
 }
