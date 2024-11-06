@@ -5,15 +5,13 @@ use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\FollowerController;
 use App\Mail\NewUserWelcomeMail;
-
+use App\Http\Controllers\HomeController;
 
 Auth::routes();
 
-Route::get('/email',[NewUserWelcomeMail::class,function(){
-    return new NewUserWelcomeMail();
-}]);
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/', [PostsController::class,'index']);
+Route::get('/posts', [PostsController::class,'index']);
 Route::get('/p/create', [PostsController::class, 'create']);
 Route::get('/p/{post}', [PostsController::class, 'show']);
 Route::post('/p', [PostsController::class, 'store']);
