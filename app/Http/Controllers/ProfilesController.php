@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
 
 class ProfilesController extends Controller
 {
@@ -15,87 +15,64 @@ class ProfilesController extends Controller
 
     public function index(User $user)
     {
-
         $postCount = Cache::remember(
-            'count.posts' .$user->id, 
+            'count.posts.' . $user->id,
             now()->addSeconds(30),
-            function() use($user){
-                return $user->posts->count(); 
-            }
+            fn() => $user->posts->count()
         );
 
         $followersCount = Cache::remember(
-            'count.followers' .$user->id, 
+            'count.followers.' . $user->id,
             now()->addSeconds(30),
-            function() use($user){
-                return $user->followers->count(); 
-            }
+            fn() => $user->followers->count()
         );
 
         $followingCount = Cache::remember(
-            'count.following' .$user->id, 
+            'count.following.' . $user->id,
             now()->addSeconds(30),
-            function() use($user){
-                return $user->following->count();
-            }
+            fn() => $user->following->count()
         );
 
-        return view('profiles.index', compact('user','postCount','followersCount','followingCount'));
+        return view('profiles.index', compact('user', 'postCount', 'followersCount', 'followingCount'));
     }
 
     public function edit(User $user)
     {
-        $this->authorize('update', $user->profile); // Use arrow (->) instead of hyphen (-)
+        $this->authorize('update', $user->profile);
         return view('profiles.edit', compact('user'));
     }
 
-    public function update(User $user)
-{
-    // Ensure the $user object exists
-    if (!$user) {
-        abort(404, 'User not found.');
+    public function update(Request $request, User $user)
+    {
+        // Check if user exists and authorize update
+        abort_unless($user, 404, 'User not found.');
+        $this->authorize('update', $user->profile);
+
+        // Validate form data
+        $data = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'url' => 'nullable|url',
+            'image' => 'nullable|image',
+        ]);
+
+        // Handle image upload and storage
+        if ($request->hasFile('image')) {
+            $imageName = hexdec(uniqid()) . '.' . $request->file('image')->getClientOriginalExtension();
+            $uploadPath = public_path('uploads/profile-pictures');
+
+            if (!File::exists($uploadPath)) {
+                File::makeDirectory($uploadPath, 0755, true);
+            }
+
+            $request->file('image')->move($uploadPath, $imageName);
+            $data['image'] = 'uploads/profile-pictures/' . $imageName;
+        }
+
+        // Update the profile
+        $user->profile->update($data);
+
+        // Redirect to user's profile after updating
+        return redirect()->route('profile.show', ['user' => $user->id]);
     }
-
-    // Authorization check
-    $this->authorize('update', $user->profile);
-
-    // Validate form data
-    $data = request()->validate([
-        'title' => 'required',
-        'description' => 'required',
-        'url' => 'url',
-        'image' => 'image', // Ensure 'image' is an image file
-    ]);
-
-    // Handle image upload and storage
-    if (request()->hasFile('profile-image')) {
-        
-
-            // Create an instance of ImageManager
-            $manager = new ImageManager(new Driver());
-            $name_gen = hexdec(uniqid()).'.'.request()->file('profile-image')->getClientOriginalExtension();
-
-            // Store the image and resize it
-            $image = $manager->read(request()->file('profile-image')); 
-            //resized image
-            $image = $image->resize(1000,1000);
-            // save modified image in new format 
-            $image->save(public_path('storage/uploads/profile-pictures/'.$name_gen));
-            $imagePath = 'uploads/profile-pictures/'.$name_gen;
-
-    } else {
-        // If no new image uploaded, retain the existing image path
-        $imagePath = $user->profile->image ?? null;
-    }
-
-    // Update the profile
-    $user->profile->update(array_merge(
-        $data,
-        ['image' => $imagePath]
-    ));
-
-    // Redirect to user's profile after updating
-    return redirect('/profile/' . $user->id);
-}
-
 }

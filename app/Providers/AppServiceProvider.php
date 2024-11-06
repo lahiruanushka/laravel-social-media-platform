@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app->booted(function () {
+            $this->app->make('cache')->store('file')->forget('spatie.permission.cache');
+        });
     }
 }
