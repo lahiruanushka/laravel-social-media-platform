@@ -94,7 +94,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end shadow">
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="{{ route('profile.show', Auth::user()->id) }}">
                                         <i class="bi bi-person me-2"></i> Profile
                                     </a>
                                     <a class="dropdown-item" href="#">
