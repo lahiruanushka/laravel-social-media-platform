@@ -5,7 +5,7 @@
     <div class="row mb-5">
         <div class="col-lg-4 text-center text-lg-start mb-4 mb-lg-0">
             <div class="position-relative d-inline-block">
-                <img src="{{ asset($user->profile->image) }}"
+                <img src="{{ $user->profile->image ? asset($user->profile->image) : asset('images/Blank-Profile-Picture.webp') }}"
                     alt="{{ $user->username }}'s avatar"
                     class="rounded-circle border shadow-sm"
                     style="width: 200px; height: 200px; object-fit: cover;">

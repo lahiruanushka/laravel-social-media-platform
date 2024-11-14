@@ -90,7 +90,10 @@
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="/api/placeholder/32/32" class="rounded-circle me-2" alt="Profile">
+                                               <img src="{{ Auth::user()->profile->image ? asset(Auth::user()->profile->image) : asset('images/Blank-Profile-Picture.webp') }}"
+     class="rounded-circle me-2"
+     style="width: 30px; height: 30px;"
+     alt="Profile Picture">
                                     <span>{{ Auth::user()->username }}</span>
                                 </a>
 

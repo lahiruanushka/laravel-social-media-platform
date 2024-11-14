@@ -9,17 +9,22 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <div class="d-flex align-items-center mb-4">
-                            <img src="/api/placeholder/64/64" class="rounded-circle me-3" alt="Profile Picture">
-                            <div>
-                                <h5 class="mb-0">Welcome back!</h5>
-                                <small class="text-muted">{{ Auth::user()->name }}</small>
-                            </div>
+                               <img src="{{ Auth::user()->profile->image ? asset(Auth::user()->profile->image) : asset('images/Blank-Profile-Picture.webp') }}"
+     class="rounded-circle me-3"
+     style="width: 40px; height: 40px;"
+     alt="Profile Picture">
+
+                         <div class="d-block">
+    <h5 class="mb-0">Welcome back!</h5>
+    <small class="text-muted">{{ Auth::user()->name }} <span class="text-muted">@ {{ Auth::user()->username }}</span></small>
+</div>
+
                         </div>
 
                         <div class="mb-4">
                             <h6 class="text-uppercase fw-bold text-secondary mb-3">Profile Settings</h6>
                             <div class="list-group list-group-flush">
-                                <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <a href="/profile/{{ Auth::user()->id }}/edit" class="list-group-item list-group-item-action d-flex align-items-center">
                                     <i class="bi bi-person-gear me-3"></i> Edit Profile
                                 </a>
                                 <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
@@ -80,7 +85,8 @@
                     <div class="card-body text-center py-5">
                         <i class="bi bi-newspaper display-1 text-muted mb-3"></i>
                         <h5>No Posts Yet</h5>
-                        <p class="text-muted">Be the first one to share something!</p>
+                     <p class="text-muted ms-3 fw-bold text-center">Follow friends to view their posts</p>
+
                     </div>
                 </div>
             @else
@@ -97,22 +103,22 @@
                 <div class="card shadow-sm mb-4">
                     <div class="card-body">
                         <h6 class="text-uppercase fw-bold text-secondary mb-3">Suggested Friends</h6>
-                        <div class="suggested-user mb-3 d-flex align-items-center">
-                            <img src="/api/placeholder/48/48" class="rounded-circle me-3" alt="User Profile">
+
+                        @foreach ($usersNotFollowed as $user)
+             <div class="suggested-user mb-3 d-flex align-items-center">
+                            <img src="{{ $user->profile->image ? asset($user->profile->image) : asset('images/Blank-Profile-Picture.webp') }}" class="rounded-circle me-3"
+     style="width: 40px; height: 40px;" alt="User Profile">
                             <div>
-                                <h6 class="mb-0">John Doe</h6>
+                                  <a class="dropdown-item" href="{{ route('profile.show', ['user' => $user->id]) }}">
+                    <h6 class="mb-0">{{ $user->name }}</h6>
+                </a>
                                 <small class="text-muted">12 mutual friends</small>
                             </div>
-                            <button class="btn btn-sm btn-primary ms-auto">Follow</button>
-                        </div>
-                        <div class="suggested-user mb-3 d-flex align-items-center">
-                            <img src="/api/placeholder/48/48" class="rounded-circle me-3" alt="User Profile">
-                            <div>
-                                <h6 class="mb-0">Jane Smith</h6>
-                                <small class="text-muted">8 mutual friends</small>
-                            </div>
-                            <button class="btn btn-sm btn-primary ms-auto">Follow</button>
-                        </div>
+                                    <form action="{{ route('follow', $user) }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-sm btn-primary ms-3">Follow</button>
+        </form>
+                        </div>@endforeach
                     </div>
                 </div>
 

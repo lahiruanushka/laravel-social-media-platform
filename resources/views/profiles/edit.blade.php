@@ -17,9 +17,10 @@
                         <!-- Profile Image Upload -->
                         <div class="text-center mb-4">
                             <div class="position-relative d-inline-block">
-                                <img src="{{ $user->profile->profile_image ?? 'default_image_url_here' }}"
-                                    class="rounded-circle border shadow-sm mb-3"
-                                    style="width: 150px; height: 150px; object-fit: cover;">
+                                            <img src="{{ $user->profile->image ? asset($user->profile->image) : asset('images/Blank-Profile-Picture.webp') }}"
+     class="rounded-circle me-3"
+     style="width: 150px; height: 150px; object-fit: cover"
+     alt="Profile Picture">
                                 <label for="image" class="position-absolute bottom-0 end-0 bg-primary rounded-circle p-2 shadow-sm" style="cursor: pointer;">
                                     <i class="fas fa-camera text-white"></i>
                                     <input id="image" type="file" class="d-none @error('image') is-invalid @enderror" name="image">
