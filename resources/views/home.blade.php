@@ -84,38 +84,10 @@
                     </div>
                 </div>
             @else
-                @foreach ($posts as $post)
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-header bg-white border-0 py-3">
-                            <div class="d-flex align-items-center">
-                                <img src="/api/placeholder/40/40" class="rounded-circle me-3" alt="Profile Picture">
-                                <div>
-                                    <h6 class="mb-0">{{ $post->user->name }}</h6>
-                                    <small class="text-muted">{{ $post->created_at->diffForHumans() }}</small>
-                                </div>
-                            </div>
-                        </div>
-                        @if ($post->image)
-                            <img src="{{ asset($post->image) }}" alt="{{ $post->caption }}" class="card-img-top">
-                        @endif
-                        <div class="card-body">
-                            <p class="card-text">{{ $post->caption }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">
-                                        <i class="bi bi-heart"></i> Like
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">
-                                        <i class="bi bi-chat"></i> Comment
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">
-                                        <i class="bi bi-share"></i> Share
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+               @foreach ($posts as $post)
+    <x-post-card :post="$post" />
+@endforeach
+
             @endif
         </div>
 

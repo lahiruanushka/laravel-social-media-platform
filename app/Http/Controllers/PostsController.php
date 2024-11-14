@@ -33,6 +33,7 @@ class PostsController extends Controller
     {
         return view('posts.create');
     }
+
     public function store(Request $request)
     {
         // Validate form data
@@ -75,4 +76,5 @@ class PostsController extends Controller
     {
         return view('posts.show', compact('post'));
     }
+
 }

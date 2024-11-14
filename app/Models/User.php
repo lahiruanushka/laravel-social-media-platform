@@ -66,21 +66,26 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id');
     }
 
-
-protected static function boot()
+    public function likes()
 {
-    parent::boot();
-    
-    static::created(function ($user) {
-        // Create a profile for the newly created user
-        $user->profile()->create([
-            'title' => $user->username,
-        ]);
-
-          // Send welcome email to the user
-        Mail::to($user->email)->send(new NewUserWelcomeMail());
-    });
-
+    return $this->belongsToMany(Post::class, 'likes');
 }
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($user) {
+            // Create a profile for the newly created user
+            $user->profile()->create([
+                'title' => $user->username,
+            ]);
+
+              // Send welcome email to the user
+            Mail::to($user->email)->send(new NewUserWelcomeMail());
+        });
+
+    }
 
 }
