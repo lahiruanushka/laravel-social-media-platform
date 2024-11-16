@@ -138,19 +138,6 @@ GET    /search         - Search functionality
 ![Password Change](docs/screenshots/screenshot-password-change.png)
 *Secure password update interface*
 
-## Development
-
-### Testing
-```bash
-php artisan test
-```
-
-### Code Style
-This project follows PSR-12 coding standards. Format your code using:
-```bash
-composer format
-```
-
 ## Contributing
 
 1. Fork the repository
@@ -165,4 +152,4 @@ Released under the [MIT License](LICENSE)
 
 ## Support
 
-For support, please open an issue in the GitHub repository or contact the development team.
+For support, please open an issue in the GitHub repository or contact me.
