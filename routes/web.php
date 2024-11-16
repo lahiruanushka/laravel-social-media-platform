@@ -5,7 +5,8 @@ use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PostLikeController; // Add this line
+use App\Http\Controllers\PostLikeController;
+use App\Http\Controllers\PasswordController;
 use App\Mail\NewUserWelcomeMail;
 
 // Authentication Routes
@@ -28,15 +29,9 @@ Route::prefix('posts')->group(function () {
 
 // Profile Routes
 Route::prefix('profile')->group(function () {
-    // Most specific routes first
-    Route::get('/{user}/change-password', [ProfilesController::class, 'showChangePasswordForm'])
-        ->name('profile.change-password');
-    Route::patch('/{user}/change-password', [ProfilesController::class, 'updatePassword'])
-        ->name('profile.update-password');
-    Route::get('/{user}/edit', [ProfilesController::class, 'edit'])
+   Route::get('/{user}/edit', [ProfilesController::class, 'edit'])
         ->name('profile.edit');
 
-    // Then more general routes
     Route::patch('/{user}', [ProfilesController::class, 'update'])
         ->name('profile.update');
     Route::get('/{user}', [ProfilesController::class, 'index'])
@@ -48,3 +43,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/follow/{user}', [FollowerController::class, 'follow'])->name('follow');
     Route::delete('/unfollow/{user}', [FollowerController::class, 'unfollow'])->name('unfollow');
 });
+
+// Change Password Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/password/change', [PasswordController::class, 'showChangePasswordForm'])->name('password.change');
+    Route::post('/password/change', [PasswordController::class, 'updatePassword'])->name('password.update');
+});
+

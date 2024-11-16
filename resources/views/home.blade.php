@@ -31,7 +31,7 @@
                                 <a href="/profile/{{ Auth::user()->id }}/edit" class="list-group-item list-group-item-action d-flex align-items-center">
                                     <i class="bi bi-person-gear me-3"></i> Edit Profile
                                 </a>
- <a href="#"
+ <a  href="{{ route('password.change') }}"
        class="list-group-item list-group-item-action d-flex align-items-center">
         <i class="bi bi-key me-3"></i> Change Password
     </a>

@@ -2,6 +2,14 @@
 
 @section('content')
 <div class="container py-4">
+
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm rounded-4">
@@ -113,7 +121,7 @@
                             <button type="submit" class="btn btn-primary btn-lg">
                                 <i class="fas fa-save me-2"></i>Save Changes
                             </button>
-                                <a href="#" class="btn btn-outline-secondary">
+                                <a href="{{ route('password.change') }}" class="btn btn-outline-secondary">
                                 <i class="fas fa-lock me-2"></i>  Change Password
                             </a>
                             <a href="/profile/{{ $user->id }}" class="btn btn-outline-success">
