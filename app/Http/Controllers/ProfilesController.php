@@ -36,43 +36,55 @@ class ProfilesController extends Controller
         return view('profiles.show', compact('user', 'postCount', 'followersCount', 'followingCount'));
     }
 
+
+
     public function edit(User $user)
     {
         $this->authorize('update', $user->profile);
         return view('profiles.edit', compact('user'));
     }
 
-    public function update(Request $request, User $user)
-    {
-        // Check if user exists and authorize update
-        abort_unless($user, 404, 'User not found.');
-        $this->authorize('update', $user->profile);
+   public function update(Request $request, User $user)
+{
+    // Check if user exists and authorize update
+    abort_unless($user, 404, 'User not found.');
+    $this->authorize('update', $user->profile);
 
-        // Validate form data
-        $data = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'url' => 'nullable|url',
-            'image' => 'nullable|image',
-        ]);
+    // Validate form data
+    $data = $request->validate([
+        'title' => 'required',
+        'description' => 'required',
+        'url' => 'nullable|url',
+        'image' => 'nullable|image',
+        'name' => 'required',
+        'username' => 'required'
+    ]);
 
-        // Handle image upload and storage
-        if ($request->hasFile('image')) {
-            $imageName = hexdec(uniqid()) . '.' . $request->file('image')->getClientOriginalExtension();
-            $uploadPath = public_path('uploads/profile-pictures');
+    // Handle image upload and storage
+    if ($request->hasFile('image')) {
+        $imageName = hexdec(uniqid()) . '.' . $request->file('image')->getClientOriginalExtension();
+        $uploadPath = public_path('uploads/profile-pictures');
 
-            if (!File::exists($uploadPath)) {
-                File::makeDirectory($uploadPath, 0755, true);
-            }
-
-            $request->file('image')->move($uploadPath, $imageName);
-            $data['image'] = 'uploads/profile-pictures/' . $imageName;
+        if (!File::exists($uploadPath)) {
+            File::makeDirectory($uploadPath, 0755, true);
         }
 
-        // Update the profile
-        $user->profile->update($data);
-
-        // Redirect to user's profile after updating
-        return redirect()->route('profile.show', ['user' => $user->id]);
+        $request->file('image')->move($uploadPath, $imageName);
+        $data['image'] = 'uploads/profile-pictures/' . $imageName;
     }
+
+    // Split data for profiles and users table
+    $profileData = array_intersect_key($data, array_flip(['title', 'description', 'url', 'image']));
+    $userData = array_intersect_key($data, array_flip(['name', 'username']));
+
+    // Update the profile
+    $user->profile->update($profileData);
+
+    // Update the user
+    $user->update($userData);
+
+    // Redirect to user's profile after updating
+    return redirect()->route('profile.show', ['user' => $user->id]);
+}
+
 }

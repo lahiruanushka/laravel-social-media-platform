@@ -26,13 +26,19 @@ class HomeController extends Controller
     public function index()
     {
        $user = auth()->user();
-        $usersNotFollowed = User::whereNotIn('id', $user->following->pluck('id'))->get();
+      $usersNotFollowed = User::with('profile') // Eager load profiles
+    ->whereNotIn('id', $user->following->pluck('id'))
+    ->where('id', '!=', $user->id)
+    ->get();
 
-        $posts = Post::with('user')
-              ->whereHas('user', function($query) use ($user) {
-                  $query->whereIn('id', $user->following->pluck('id'));
-              })
-              ->get();
+
+       $posts = Post::with('user')
+    ->where(function ($query) use ($user) {
+        $query->where('user_id', $user->id)
+              ->orWhereIn('user_id', $user->following->pluck('id'));
+    })
+    ->orderBy('created_at', 'desc')
+    ->get();
 
         // Return view with posts and users
         return view('home', compact('posts', 'usersNotFollowed'));

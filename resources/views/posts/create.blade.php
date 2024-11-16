@@ -9,7 +9,7 @@
                     <div class="d-flex align-items-center mb-4">
                         <div class="me-3">
                             <div class="rounded-circle overflow-hidden" style="width: 50px; height: 50px;">
-                                <img src="{{ auth()->user()->avatar ?? '/images/default-avatar.png' }}"
+                                <img src="{{ Auth::user()->profile->image ? asset(Auth::user()->profile->image) : asset('images/Blank-Profile-Picture.webp') }}"
                                      alt="Profile Picture"
                                      class="w-100 h-100 object-fit-cover">
                             </div>

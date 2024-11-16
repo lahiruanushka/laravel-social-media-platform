@@ -28,9 +28,19 @@ Route::prefix('posts')->group(function () {
 
 // Profile Routes
 Route::prefix('profile')->group(function () {
-    Route::get('/{user}', [ProfilesController::class, 'index'])->name('profile.show');
-    Route::get('/{user}/edit', [ProfilesController::class, 'edit'])->name('profile.edit');
-    Route::patch('/{user}', [ProfilesController::class, 'update'])->name('profile.update');
+    // Most specific routes first
+    Route::get('/{user}/change-password', [ProfilesController::class, 'showChangePasswordForm'])
+        ->name('profile.change-password');
+    Route::patch('/{user}/change-password', [ProfilesController::class, 'updatePassword'])
+        ->name('profile.update-password');
+    Route::get('/{user}/edit', [ProfilesController::class, 'edit'])
+        ->name('profile.edit');
+
+    // Then more general routes
+    Route::patch('/{user}', [ProfilesController::class, 'update'])
+        ->name('profile.update');
+    Route::get('/{user}', [ProfilesController::class, 'index'])
+        ->name('profile.show');
 })->middleware('auth');
 
 // Follow/Unfollow Routes

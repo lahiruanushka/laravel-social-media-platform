@@ -16,7 +16,11 @@
 
                          <div class="d-block">
     <h5 class="mb-0">Welcome back!</h5>
-    <small class="text-muted">{{ Auth::user()->name }} <span class="text-muted">@ {{ Auth::user()->username }}</span></small>
+
+                        <a href="{{ route('profile.show', Auth::user()->id) }}" class="text-decoration-none">
+    <small class="text-muted">{{ Auth::user()->name }}</small>
+</a>
+
 </div>
 
                         </div>
@@ -27,9 +31,10 @@
                                 <a href="/profile/{{ Auth::user()->id }}/edit" class="list-group-item list-group-item-action d-flex align-items-center">
                                     <i class="bi bi-person-gear me-3"></i> Edit Profile
                                 </a>
-                                <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
-                                    <i class="bi bi-key me-3"></i> Change Password
-                                </a>
+ <a href="#"
+       class="list-group-item list-group-item-action d-flex align-items-center">
+        <i class="bi bi-key me-3"></i> Change Password
+    </a>
                                 <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
                                     <i class="bi bi-bell me-3"></i> Notifications
                                 </a>
