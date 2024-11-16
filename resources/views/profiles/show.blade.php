@@ -30,7 +30,7 @@
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
                         <div>
                             <h1 class="display-6 fw-bold mb-1">{{ $user->name }}</h1>
-                            <h2 class="h5 text-muted mb-2">{{ $user->username }}</h2>
+                            <h2 class="h5 text-muted mb-2">@ {{ $user->username }}</h2>
                         </div>
 
                         <!-- Action Buttons -->

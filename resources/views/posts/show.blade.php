@@ -51,7 +51,7 @@
                                     <div>
                                         <a href="{{ route('profile.show', $post->user->id) }}"
                                            class="text-decoration-none">
-                                            <h6 class="mb-0 fw-bold text-dark">{{ $post->user->username }}</h6>
+                                            <h6 class="mb-0 fw-bold text-dark">@ {{ $post->user->username }}</h6>
                                         </a>
                                         <small class="text-muted">{{ $post->location ?? 'No location' }}</small>
                                     </div>
