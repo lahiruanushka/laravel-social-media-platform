@@ -47,6 +47,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Navigation -->
                     <ul class="navbar-nav me-auto">
+                         @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/') }}">
                                 <i class="bi bi-house-door"></i> Home
@@ -62,9 +63,11 @@
                                 <i class="bi bi-bell"></i> Notifications
                             </a>
                         </li>
+                          @endauth
                     </ul>
 
                 <!-- Search Form -->
+                @auth
 <form class="d-none d-md-flex mx-3" action="{{ route('search') }}" method="GET">
     <div class="input-group">
         <span class="input-group-text bg-light border-end-0">
@@ -75,7 +78,7 @@
         <button type="submit" class="btn btn-secondary">Search</button>
     </div>
 </form>
-
+@endauth
 
                     <!-- Right Navigation -->
                     <ul class="navbar-nav ms-auto">
