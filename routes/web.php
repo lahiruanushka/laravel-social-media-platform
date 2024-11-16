@@ -7,6 +7,8 @@ use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\SearchController;
+
 use App\Mail\NewUserWelcomeMail;
 
 // Authentication Routes
@@ -48,5 +50,11 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/password/change', [PasswordController::class, 'showChangePasswordForm'])->name('password.change');
     Route::post('/password/change', [PasswordController::class, 'updatePassword'])->name('password.update');
+});
+
+// Search Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/search', [SearchController::class, 'index'])->name('search');
+
 });
 

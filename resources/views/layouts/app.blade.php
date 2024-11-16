@@ -27,8 +27,8 @@
 
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <div id="app">
-        <!-- Navbar -->
+
+    <!-- Navbar -->
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top">
             <div class="container">
                 <!-- Brand -->
@@ -64,15 +64,18 @@
                         </li>
                     </ul>
 
-                    <!-- Search Form -->
-                    <form class="d-none d-md-flex mx-3">
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0">
-                                <i class="bi bi-search"></i>
-                            </span>
-                            <input type="search" class="form-control bg-light border-start-0" placeholder="Search PostVibe">
-                        </div>
-                    </form>
+                <!-- Search Form -->
+<form class="d-none d-md-flex mx-3" action="{{ route('search') }}" method="GET">
+    <div class="input-group">
+        <span class="input-group-text bg-light border-end-0">
+            <i class="bi bi-search"></i>
+        </span>
+        <input type="search" class="form-control bg-light border-start-0" placeholder="Search PostVibe" name="q" id="search-input">
+        <!-- Search Button -->
+        <button type="submit" class="btn btn-secondary">Search</button>
+    </div>
+</form>
+
 
                     <!-- Right Navigation -->
                     <ul class="navbar-nav ms-auto">
@@ -125,6 +128,8 @@
                 </div>
             </div>
         </nav>
+
+    <div id="app" class="d-flex flex-column min-vh-100">
 
         <!-- Main Content -->
         <main class="py-4 flex-grow-1">
