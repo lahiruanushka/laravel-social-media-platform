@@ -29,8 +29,8 @@
                 <div class="col-lg-9">
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
                         <div>
-                            <h1 class="display-6 fw-bold mb-1">{{ $user->username }}</h1>
-                            <h2 class="h5 text-muted mb-2">{{ $user->profile->title }}</h2>
+                            <h1 class="display-6 fw-bold mb-1">{{ $user->name }}</h1>
+                            <h2 class="h5 text-muted mb-2">{{ $user->username }}</h2>
                         </div>
 
                         <!-- Action Buttons -->
@@ -109,7 +109,7 @@
         @foreach ($user->posts as $post)
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm h-100 post-card">
-                    <a href="/p/{{ $post->id }}" class="text-decoration-none">
+                    <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="text-decoration-none">
                         @if ($post->image)
                             <div class="position-relative">
                                 <img src="{{ asset($post->image) }}"

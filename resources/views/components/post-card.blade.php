@@ -1,7 +1,7 @@
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-white border-0 py-3">
         <div class="d-flex align-items-center">
-            <img src="{{ $post->user->image ? asset($post->user->image) : asset('images/Blank-Profile-Picture.webp') }}"
+            <img src="{{ $post->user->profile->image ? asset($post->user->profile->image) : asset('images/Blank-Profile-Picture.webp') }}"
                  class="rounded-circle me-3"
                  style="width: 40px; height: 40px;"
                  alt="Profile Picture">
@@ -14,7 +14,9 @@
         </div>
     </div>
     @if ($post->image)
+    <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="text-decoration-none">
         <img src="{{ asset($post->image) }}" alt="{{ $post->caption }}" class="card-img-top">
+    </a>
     @endif
     <div class="card-body">
         <p class="card-text">{{ $post->caption }}</p>

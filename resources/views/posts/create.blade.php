@@ -24,21 +24,18 @@
                         @csrf
 
                         <!-- Image Preview -->
-                        <div class="mb-4 text-center position-relative" id="imagePreviewContainer" style="display: none;">
-                            <img id="imagePreview" src="#" alt="Preview" class="img-fluid rounded" style="max-height: 400px;">
-                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2" id="removeImage">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-
-                        <!-- Drag & Drop Image Upload -->
-                        <div class="mb-4">
-                            <div class="upload-area p-5 rounded bg-light text-center @error('image') border border-danger @enderror"
-                                 id="uploadArea">
+                        <div class="position-relative mb-4 text-center">
+                            <div id="imagePreviewContainer" class="d-none">
+                                <img id="imagePreview" src="#" alt="Preview" class="img-fluid rounded shadow">
+                                <button type="button" id="removeImage" class="btn btn-danger position-absolute top-0 end-0 m-2">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="upload-area p-5 rounded bg-light text-center @error('image') border border-danger @enderror">
                                 <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
-                                <h5>Drag and drop your image here</h5>
-                                <p class="text-muted mb-3">or</p>
-                                <label class="btn btn-outline-primary px-4">
+                                <h5 class="mb-3">Drag & Drop your image here or click to select a file</h5>
+                                <p class="text-muted">Accepted file types: .jpg, .jpeg, .png</p>
+                                <label class="btn btn-outline-primary">
                                     Choose File
                                     <input type="file" name="image" id="image" class="d-none" accept="image/*">
                                 </label>
@@ -54,8 +51,7 @@
                                       id="caption"
                                       rows="3"
                                       class="form-control form-control-lg @error('caption') is-invalid @enderror"
-                                      placeholder="Write a caption..."
-                            >{{ old('caption') }}</textarea>
+                                      placeholder="Write a caption...">{{ old('caption') }}</textarea>
                             @error('caption')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -75,8 +71,8 @@
 
                         <!-- Submit Buttons -->
                         <div class="d-flex gap-2 justify-content-end">
-                            <a href="{{ route('home') }}" class="btn btn-light px-4">Cancel</a>
-                            <button type="submit" class="btn btn-primary px-4">
+                            <a href="{{ route('home') }}" class="btn btn-light">Cancel</a>
+                            <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-paper-plane me-2"></i>Share Post
                             </button>
                         </div>
@@ -90,22 +86,20 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const uploadArea = document.getElementById('uploadArea');
+    // Get DOM elements
+    const uploadArea = document.querySelector('.upload-area');
     const imageInput = document.getElementById('image');
     const imagePreview = document.getElementById('imagePreview');
     const imagePreviewContainer = document.getElementById('imagePreviewContainer');
     const removeImageBtn = document.getElementById('removeImage');
 
-    // Drag and drop functionality
+    // Prevent default drag behaviors
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         uploadArea.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
     });
 
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
+    // Highlight drop zone when dragging over it
     ['dragenter', 'dragover'].forEach(eventName => {
         uploadArea.addEventListener(eventName, highlight, false);
     });
@@ -113,6 +107,21 @@ document.addEventListener('DOMContentLoaded', function() {
     ['dragleave', 'drop'].forEach(eventName => {
         uploadArea.addEventListener(eventName, unhighlight, false);
     });
+
+    // Handle dropped files
+    uploadArea.addEventListener('drop', handleDrop, false);
+
+    // Handle file input change
+    imageInput.addEventListener('change', handleFileSelect, false);
+
+    // Handle remove button click
+    removeImageBtn.addEventListener('click', removeImage, false);
+
+    // Utility functions
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
 
     function highlight(e) {
         uploadArea.classList.add('bg-light-hover');
@@ -122,41 +131,64 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadArea.classList.remove('bg-light-hover');
     }
 
-    uploadArea.addEventListener('drop', handleDrop, false);
-
     function handleDrop(e) {
         const dt = e.dataTransfer;
         const files = dt.files;
+
         handleFiles(files);
     }
 
-    // Handle file selection
-    imageInput.addEventListener('change', function() {
-        handleFiles(this.files);
-    });
+    function handleFileSelect(e) {
+        const files = e.target.files;
+        handleFiles(files);
+    }
 
     function handleFiles(files) {
         if (files.length > 0) {
             const file = files[0];
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imagePreview.src = e.target.result;
-                    imagePreviewContainer.style.display = 'block';
-                    uploadArea.style.display = 'none';
-                }
-                reader.readAsDataURL(file);
+
+            // Validate file type
+            if (!file.type.match('image.*')) {
+                alert('Please upload an image file (jpg, jpeg, png)');
+                return;
             }
+
+            // Validate file size (e.g., max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Please upload an image smaller than 5MB');
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                // Show preview
+                imagePreview.src = e.target.result;
+                imagePreviewContainer.classList.remove('d-none');
+                uploadArea.classList.add('d-none');
+            };
+
+            reader.onerror = function() {
+                alert('Error reading file');
+                removeImage();
+            };
+
+            reader.readAsDataURL(file);
         }
     }
 
-    // Remove image
-    removeImageBtn.addEventListener('click', function() {
+    function removeImage() {
+        // Clear the file input
         imageInput.value = '';
-        imagePreviewContainer.style.display = 'none';
-        uploadArea.style.display = 'block';
-    });
+
+        // Clear the preview
+        imagePreview.src = '';
+
+        // Hide preview container and show upload area
+        imagePreviewContainer.classList.add('d-none');
+        uploadArea.classList.remove('d-none');
+    }
 });
 </script>
-@endpush
+  @endpush
 @endsection

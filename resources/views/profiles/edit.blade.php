@@ -171,6 +171,7 @@
 }
 </style>
 
+@push('scripts')
 <script>
 function previewImage(event) {
     const reader = new FileReader();
@@ -181,4 +182,5 @@ function previewImage(event) {
     reader.readAsDataURL(event.target.files[0]);
 }
 </script>
+  @endpush
 @endsection
