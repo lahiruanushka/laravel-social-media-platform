@@ -60,18 +60,19 @@
                                 <div>
                                  @if(Auth::id() !== $post->user_id)
     @if(Auth::user()->following->contains($post->user_id))
-        <form action="{{ route('unfollow', $post->user_id) }}" method="POST" class="d-inline">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-secondary rounded-pill px-3">
-                <i class="fas fa-user-minus me-2"></i>Unfollow
-            </button>
-        </form>
+   <form action="{{ route('unfollow', $post->user_id) }}" method="POST" class="d-inline-flex">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-danger rounded-pill px-4 d-flex align-items-center">
+        Unfollow
+    </button>
+</form>
+
     @else
         <form action="{{ route('follow', $post->user_id) }}" method="POST" class="d-inline">
             @csrf
             <button type="submit" class="btn btn-primary rounded-pill px-3">
-                <i class="fas fa-user-plus me-2"></i>Follow
+                Follow
             </button>
         </form>
     @endif
