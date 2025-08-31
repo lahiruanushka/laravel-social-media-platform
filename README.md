@@ -135,4 +135,4 @@ Released under the [MIT License](LICENSE)
 ## 💪 Support
 
 - 📫 For support, please open an issue in the GitHub repository
-- 📧 Contact: lahiruanushkaofficial@gmail.com
+- 📧 Contact: lahiruanushkarathnayake@gmail.com
